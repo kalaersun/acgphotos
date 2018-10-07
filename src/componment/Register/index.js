@@ -1,16 +1,13 @@
 import React from 'react'
 import {Button,Input} from 'antd';
 import './index.scss'
-export default class Login extends React.Component{
+export default class Register extends React.Component{
     constructor(){
         super()
         this.state={
             username:'',
             password:''
         }
-    }
-    register=()=>{
-        this.props.history.push('/register')
     }
     render(){
         const {username,password}=this.state
@@ -34,7 +31,7 @@ export default class Login extends React.Component{
                 </div>
                 <div className="login-module-section">
                 <Button>登录</Button>
-                <Button onClick={this.register}>注册</Button>
+                <Button>注册</Button>
                 </div>
             </div>
         )
