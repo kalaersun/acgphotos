@@ -6,6 +6,7 @@ import thunk from 'redux-thunk'
 import Login from './componment/Login'
 import Register from './componment/Register'
 import AuthRouter from './componment/AuthRouter'
+import PhotoList from './componment/PhotoList'
 import { Provider } from 'react-redux'
 import {BrowserRouter,Switch,Route,Redirect} from 'react-router-dom'
 import reducers from './redux/reducer'
@@ -20,6 +21,7 @@ ReactDOM.render(
                 <AuthRouter></AuthRouter>
                 <Route path='/login' component={Login}></Route>
                 <Route path='/register' component={Register}></Route>
+                <Route path='/photolist' component={PhotoList}></Route>
             </div>
         </BrowserRouter>
     </Provider>, document.getElementById('root'));

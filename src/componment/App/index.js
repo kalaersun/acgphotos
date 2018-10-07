@@ -2,6 +2,11 @@ import React from 'react'
 import { connect } from 'react-redux'
 import {Button} from 'antd';
 import {addGun} from '../../redux/index.redux'
+@connect{
+    state=>{
+        num:state
+    },{addGun}
+}
 class App extends React.Component {
     render() {
         return (
@@ -12,8 +17,10 @@ class App extends React.Component {
         )
     }
 }
-const mapStatetoProps = (state) => {
+/* const mapStatetoProps = (state) => {
     return { num: state }
 }
 const actionCreators = { addGun }
-App = connect(mapStatetoProps, actionCreators)(App)
+App = connect(mapStatetoProps, actionCreators)(App) */
+
+export default App

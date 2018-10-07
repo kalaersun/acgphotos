@@ -38,7 +38,7 @@ export default class Login extends React.Component{
                         确认密码：
                     </div>
                     <div className="login-module-section-input">
-                    <Input placeholder="密码"  value={confirmPassword}/>
+                    <Input placeholder="确认密码"  value={confirmPassword}/>
                     </div>
                 </div>
                 <div className="login-module-section">
