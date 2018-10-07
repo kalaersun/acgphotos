@@ -6,14 +6,15 @@ export default class Login extends React.Component{
         super()
         this.state={
             username:'',
-            password:''
+            password:'',
+            confirmPassword:''
         }
     }
     register=()=>{
         this.props.history.push('/register')
     }
     render(){
-        const {username,password}=this.state
+        const {username,password,confirmPassword}=this.state
         return(
             <div className="login-module">
                 <div className="login-module-section">
@@ -30,6 +31,14 @@ export default class Login extends React.Component{
                     </div>
                     <div className="login-module-section-input">
                     <Input placeholder="密码"  value={password}/>
+                    </div>
+                </div>
+                <div className="login-module-section">
+                    <div className="login-module-section-title">
+                        确认密码：
+                    </div>
+                    <div className="login-module-section-input">
+                    <Input placeholder="密码"  value={confirmPassword}/>
                     </div>
                 </div>
                 <div className="login-module-section">

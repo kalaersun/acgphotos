@@ -9,6 +9,9 @@ export default class Register extends React.Component{
             password:''
         }
     }
+    register=()=>{
+        this.props.history.push('/register')
+    }
     render(){
         const {username,password}=this.state
         return(
@@ -31,7 +34,7 @@ export default class Register extends React.Component{
                 </div>
                 <div className="login-module-section">
                 <Button>登录</Button>
-                <Button>注册</Button>
+                <Button onClick={this.register}>注册</Button>
                 </div>
             </div>
         )
