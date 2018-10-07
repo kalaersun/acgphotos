@@ -8,10 +8,10 @@ class AuthRoute extends React.Component{
         if(checkLogin.indexOf(pathName)>-1){
             return null
         }
-        Axios.get('/user/info').
-            then(res=>{
-                if(res.status==200){
-                   if(res.data.code==0){
+        Axios.get('/user/info')
+            .then(res=>{
+                if(res.status===200){
+                   if(res.data.code===0){
 
                    }else{
                     this.props.history.push('/login')
