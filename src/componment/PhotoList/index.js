@@ -26,3 +26,4 @@ class PhotoList extends React.Component{
     }
 }
 export default PhotoList
+//https://github.com/xudafeng/autoresponsive-react
