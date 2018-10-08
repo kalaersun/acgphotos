@@ -23,9 +23,7 @@ class AuthRoute extends React.Component{
             })
     }
     render(){
-        return(
-            <div>判断跳转逻辑</div>
-        )
+        return null
     }
 }
 export default withRouter(AuthRoute)

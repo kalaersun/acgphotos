@@ -7,14 +7,19 @@ export default class Login extends React.Component{
         this.state={
             username:'',
             password:'',
-            confirmPassword:''
         }
     }
     register=()=>{
         this.props.history.push('/register')
     }
+    handleChange=(key,e)=>{
+        let value=e.target.value
+        this.setState({
+            [key]:value
+        }) 
+    }
     render(){
-        const {username,password,confirmPassword}=this.state
+        const {username,password}=this.state
         return(
             <div className="login-module">
                 <div className="login-module-section">
@@ -22,7 +27,7 @@ export default class Login extends React.Component{
                         用户名：
                     </div>
                     <div className="login-module-section-input">
-                        <Input placeholder="用户名" value={username}/>
+                        <Input placeholder="用户名" value={username} onChange={this.handleChange.bind(this,'username')}/>
                     </div>
                 </div>
                 <div className="login-module-section">
@@ -30,15 +35,7 @@ export default class Login extends React.Component{
                         密码：
                     </div>
                     <div className="login-module-section-input">
-                    <Input placeholder="密码"  value={password}/>
-                    </div>
-                </div>
-                <div className="login-module-section">
-                    <div className="login-module-section-title">
-                        确认密码：
-                    </div>
-                    <div className="login-module-section-input">
-                    <Input placeholder="确认密码"  value={confirmPassword}/>
+                    <Input placeholder="密码"  value={password} onChange={this.handleChange.bind(this,'password')}/>
                     </div>
                 </div>
                 <div className="login-module-section">

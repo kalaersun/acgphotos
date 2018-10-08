@@ -1,11 +1,30 @@
 const mongoose = require('mongoose')
 // 链接mongo 
-const DB_URL = 'mongodb://localhost:27017'
+const DB_URL = 'mongodb://localhost:27017/acgphotos'
 mongoose.connect(DB_URL)
 mongoose.connection.on('connected',function(){
 	console.log('mongo connect success')
 })
-
+const models={
+	user:{
+		'username':{type:String,require:true},
+		'password':{type:String,require:true},
+		'avator':{type:String},
+		'desc':{type:String}
+	},
+	photoList:{
+		'src':{type:String,require:true},
+		'height':{type:String,require:true}
+	}
+}
+for(let key in models){
+	mongoose.model(key,new mongoose.Schema(models[key]))
+}
+module.exports = {
+	getModel:function(name){
+		return mongoose.model(name)
+	}
+}
 // 类似于mysql的表 mongo里有文档、字段的概念，
 /* const User = mongoose.model('user', new mongoose.Schema({
 	user:{type:String,require:true},
