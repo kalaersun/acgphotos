@@ -1,6 +1,7 @@
 import React from 'react'
 import PhotoListTop from './componment/PhotoListTop'
 import PhotoWaterFall from './componment/PhotoWaterFall'
+import './index.scss'
 class PhotoList extends React.Component{
     constructor(props){
         super(props)
