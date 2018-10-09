@@ -6,6 +6,7 @@
     "src": "https://album-1253197050.cos.ap-shanghai.myqcloud.com/images/a.jpg",
     "brand": "衣香丽影",
     "title": "夏日潮女必备",
+    "time":"2018-9-9",
     "count": "38"
   },{
     "w": "w1",
@@ -14,7 +15,7 @@
     "title": "摩登裙正流行",
     "count": "38"
   },{
-    "w": "w2",
+    "w": "w1",
     "src": "https://album-1253197050.cos.ap-shanghai.myqcloud.com/images/c.jpg",
     "brand": "埃斯普利特",
     "title": "经典旅行穿搭",
@@ -44,7 +45,7 @@
     "title": "穿出你的色彩",
     "count": "38"
   },{
-    "w": "w2",
+    "w": "w1",
     "src": "https://album-1253197050.cos.ap-shanghai.myqcloud.com/images/h.jpg",
     "brand": "PEACEBIRD",
     "title": "梦幻的时光机",
@@ -62,7 +63,7 @@
     "title": "夏日潮女必备",
     "count": "38"
   },{
-    "w": "w2",
+    "w": "w1",
     "src": "https://album-1253197050.cos.ap-shanghai.myqcloud.com/images/k.jpg",
     "brand": "BELLE MAISON",
     "title": "春夏潮流搭配",
@@ -86,7 +87,7 @@
     "title": "朦胧诱惑新感觉",
     "count": "38"
   },{
-    "w": "w2",
+    "w": "w1",
     "src": "https://album-1253197050.cos.ap-shanghai.myqcloud.com/images/subjectc10585.jpg",
     "title": "碎花浪漫",
     "count": "16",
@@ -111,7 +112,7 @@
     "count": "12",
     "brand": "INMAN茵曼/茵曼"
   },{
-    "w": "w2",
+    "w": "w1",
     "src": "https://album-1253197050.cos.ap-shanghai.myqcloud.com/images/subjectc10116.jpg",
     "title": "OSA没有图纹就辜负夏天",
     "count": "35",
@@ -136,7 +137,7 @@
     "count": "21",
     "brand": "LESS"
   },{
-    "w": "w2",
+    "w": "w1",
     "src": "https://album-1253197050.cos.ap-shanghai.myqcloud.com/images/subjectc10861.jpg",
     "productPicUrl": "https://album-1253197050.cos.ap-shanghai.myqcloud.com/images/subjectc10861(1).jpg",
     "title": "七分裤装白色单品系列",

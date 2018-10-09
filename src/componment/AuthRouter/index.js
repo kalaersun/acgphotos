@@ -1,28 +1,30 @@
 import React from 'react'
-import Axios from 'axios';
-import {withRouter} from 'react-router-dom'
-class AuthRoute extends React.Component{
-    componentDidMount(){
-        const checkLogin=['/login','register']
+import axios from 'axios';
+import { withRouter } from 'react-router-dom'
+import {lodaData} from '../../redux/user.redux'
+import {connect} from 'react-redux'
+@connect(
+    state=>state.user,{lodaData}
+)
+class AuthRoute extends React.Component {
+    componentDidMount() {
+        const checkLogin = ['/login', 'register']
         const pathName = this.props.location.pathname
-        if(checkLogin.indexOf(pathName)>-1){
+        if (checkLogin.indexOf(pathName) > -1) {
             return null
         }
-        Axios.get('/user/info')
-            .then(res=>{
-                if(res.status===200){
-                   if(res.data.code===0){
-
-                   }else{
-                    this.props.history.push('/login')
-                   }
+        axios.get('/user/info')
+            .then(res => {
+                if (res.request.status === 200) {
+                    if (res.data.code == 0) {
+                        this.props.lodaData(res.data.data)
+                    } else {
+                        this.props.history.push('/login')
+                    }
                 }
-            },
-            error=>{
-
             })
     }
-    render(){
+    render() {
         return null
     }
 }

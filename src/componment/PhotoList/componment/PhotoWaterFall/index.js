@@ -3,7 +3,7 @@ import ReactDOM from 'react-dom'
 import AutoResponsive from 'autoresponsive-react'
 import axios from 'axios';
 import './index.scss'
-
+import Zmage from 'react-zmage'
 class PhotoWaterFall extends React.Component {
     constructor(props) {
         super(props)
@@ -31,27 +31,43 @@ class PhotoWaterFall extends React.Component {
     }
     getAutoResponsiveProps=()=>{
         return {
-            itemMargin: 0,
+            itemMargin: 1,
             containerWidth: this.state.containerWidth || document.body.clientWidth,
             itemClassName: 'item',
-            gridWidth: 200,
+            gridWidth:5,
+            verticalDirection:'top',
             transitionDuration: '.5'
         };
     }
+    getPicWidth=()=>{
+        const containerWidth=(this.state.containerWidth || document.body.clientWidth)
+        let margin=5
+        if(containerWidth>2000){
+            return containerWidth/6 - margin
+        }else if(containerWidth>1500){
+            return containerWidth/5 - margin
+        }else if(containerWidth>1000){
+            return containerWidth/4 - margin
+        }else{
+            return containerWidth/3 - margin
+        }
+    }
     render() {
+        let picWidth  = this.getPicWidth()
+        let picHeight = (picWidth/16)*9
         return (
             <div className="photo-water-fall">
                 <AutoResponsive ref="container" {...this.getAutoResponsiveProps()}>
                     {
-                        this.state.data.map((i, index) => {
+                        this.state.data.map((el, index) => {
                             let style = {
-                                width: i.w === 'w1' ? 190 : 390,
-                                height: i.w === 'w1' ? 240 : 490
+                                width: picWidth,
+                                height: picHeight,
                             };
                             return (
-                                    <a key={index} href="/photolist" className={`${i.w} album item`} style={style}>
-                                        <img alt="" className="a-cover" src={i.src} />
-                                    </a>
+                                    <div key={index}  className={`${el.w} album item`} style={style}>
+                                        <Zmage alt=""  backdrop="gray" style={{'width':picWidth,height:'100%',marginTop:'3px'}} src={el.src} />
+                                    </div>
                             );
                         })
                     }

@@ -2,8 +2,9 @@ import React from 'react'
 import {Button,Input} from 'antd';
 import './index.scss'
 import {connect} from 'react-redux'
+import {Redirect} from 'react-router-dom'
 import {register} from '../../redux/user.redux'
-import { Alert } from 'antd';
+import { message } from 'antd';
 @connect(
     state=>state.user,{register}
 )
@@ -23,9 +24,6 @@ class Register extends React.Component{
         const {username,password,confirmPassword}=this.state
         this.props.register({username,password,confirmPassword})
     }
-    onClose=()=>{    
-        return false
-    }
     handleChange=(key,e)=>{
         let value=e.target.value
         this.setState({
@@ -36,6 +34,7 @@ class Register extends React.Component{
         const {username,password,confirmPassword}=this.state
         return(
             <div className="login-module">
+            {this.props.redirectTo?<Redirect to={this.props.redirectTo}/>:null}
                 <div className="login-module-section">
                     <div className="login-module-section-title">
                         用户名：
@@ -64,8 +63,7 @@ class Register extends React.Component{
                 <Button onClick={this.login}>登录</Button>
                 <Button onClick={this.register}>注册</Button>
                 </div>
-                {this.props.errorMsg!==""&&<Alert message={this.props.errorMsg} type="error"       closable
-                onClose={this.onClose}/>}
+                {this.props.errorMsg!==""&&message.warn(this.props.errorMsg)}
             </div>
         )
     }

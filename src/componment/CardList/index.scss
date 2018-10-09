@@ -1,0 +1,29 @@
+.new-card{
+    max-width: 320px;
+    margin:0 auto;
+    width: 100%;
+    min-width: 200px;
+    height: 200px;
+    box-sizing:content-box;
+    border-radius: 10px;
+    background-color: #fff;
+    .plus-sign{
+        text-align: center;
+        font-size: 100px;
+        &:hover{
+            color:red;
+        }
+    }
+    .puls-desc{
+        height: 50px;
+        width: 100%;
+        background: #565555;
+        border-bottom-left-radius: 8px;
+        border-bottom-right-radius: 8px;
+        color:white;
+        text-align: center;
+        p{
+            margin-bottom: 5px;
+        }
+    }
+}

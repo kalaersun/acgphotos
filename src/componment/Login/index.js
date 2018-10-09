@@ -1,13 +1,24 @@
 import React from 'react'
 import {Button,Input} from 'antd';
 import './index.scss'
-export default class Login extends React.Component{
+import {connect} from 'react-redux'
+import {login} from '../../redux/user.redux'
+import {Redirect} from 'react-router-dom'
+import { message} from 'antd';
+@connect(
+    state=>state.user,{login}
+)
+class Login extends React.Component{
     constructor(){
         super()
         this.state={
             username:'',
             password:'',
         }
+    }
+    login=()=>{
+        const {username,password}=this.state
+        this.props.login({username,password})
     }
     register=()=>{
         this.props.history.push('/register')
@@ -18,10 +29,14 @@ export default class Login extends React.Component{
             [key]:value
         }) 
     }
+    onClose=()=>{    
+        return false
+    }
     render(){
         const {username,password}=this.state
         return(
             <div className="login-module">
+            {this.props.redirectTo?<Redirect to={this.props.redirectTo}/>:null}
                 <div className="login-module-section">
                     <div className="login-module-section-title">
                         用户名：
@@ -39,10 +54,12 @@ export default class Login extends React.Component{
                     </div>
                 </div>
                 <div className="login-module-section">
-                <Button>登录</Button>
+                <Button onClick={this.login}>登录</Button>
                 <Button onClick={this.register}>注册</Button>
                 </div>
+                {this.props.errorMsg!==""&&message.warn(this.props.errorMsg)}
             </div>
         )
     }
 }
+export default Login 

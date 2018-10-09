@@ -7,8 +7,10 @@ import Login from './componment/Login'
 import Register from './componment/Register'
 import AuthRouter from './componment/AuthRouter'
 import PhotoList from './componment/PhotoList'
+import CardList from './componment/CardList'
+import NewAlbum from './componment/NewAlbum'
 import { Provider } from 'react-redux'
-import {BrowserRouter,Switch,Route,Redirect} from 'react-router-dom'
+import {BrowserRouter,Route} from 'react-router-dom'
 import reducers from './redux/reducer'
 const store = createStore(reducers, compose(
     applyMiddleware(thunk),
@@ -22,6 +24,8 @@ ReactDOM.render(
                 <Route path='/login' component={Login}></Route>
                 <Route path='/register' component={Register}></Route>
                 <Route path='/photolist' component={PhotoList}></Route>
+                <Route path='/cardlist' component={CardList}></Route>
+                <Route path='/newalbum' component={NewAlbum}></Route>
             </div>
         </BrowserRouter>
     </Provider>, document.getElementById('root'));

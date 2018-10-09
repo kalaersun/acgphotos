@@ -1,9 +1,12 @@
 const mongoose = require('mongoose')
 // 链接mongo 
 const DB_URL = 'mongodb://localhost:27017/acgphotos'
-mongoose.connect(DB_URL)
-mongoose.connection.on('connected',function(){
-	console.log('mongo connect success')
+mongoose.Promise = global.Promise;
+mongoose.connect(DB_URL, {useNewUrlParser:true}, function(err){
+　　if(err){
+　　　　console.log('Connection Error:' + err)
+　　}else{
+　　　　console.log('Connection success!') }
 })
 const models={
 	user:{
@@ -12,10 +15,27 @@ const models={
 		'avator':{type:String},
 		'desc':{type:String}
 	},
+	album:{
+		'userId':{type:String,require:true},
+		'activityName':{type:String,require:true},
+		'author':{type:String,require:true},
+		'coverPic':{type:String,require:true},
+		'bannerPic':{type:String,require:true},
+		'title':{type:String,require:true},
+		'desc':{type:String},
+		'date':{type:String,require:true},
+	},
+	classIfy:{
+		'albumId':{type:String,require:true},
+		'title':{type:String,require:true}
+	},
 	photoList:{
+		'classIfyId':{type:String,require:true},
 		'src':{type:String,require:true},
-		'height':{type:String,require:true}
-	}
+		'height':{type:String,require:true},
+		'viewNumber':{type:Number,require:true},
+		'date':{type:String,require:true}
+	},
 }
 for(let key in models){
 	mongoose.model(key,new mongoose.Schema(models[key]))
