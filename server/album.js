@@ -34,6 +34,7 @@ Router.post('/newAlbum',function(req,res){
 })
 Router.post('/tmpUploadFile',function(req,res){
     let form = new formidable.IncomingForm();
+    const {userId}=req.cookies
     form.encoding = 'utf-8';
     form.uploadDir = path.join(__dirname + "/../page/upload");
     form.keepExtensions = true;//保留后缀
@@ -48,31 +49,73 @@ Router.post('/tmpUploadFile',function(req,res){
         }
         let date = new Date();
         let time = '_' + date.getFullYear() + "_" + date.getMonth() + "_" + date.getDay() + "_" + date.getHours() + "_" + date.getMinutes();
-        let avatarName = name + time + '.' + type;
-        let newPath = form.uploadDir + "/" + avatarName;
-        fs.renameSync(files.avatar.path, newPath);  //重命名
-        return res.json({file:{
-            uid: 'uid',      // 文件唯一标识，建议设置为负数，防止和内部产生的 id 冲突
-            name: 'xx.png',  // 文件名
-            status: 'done', // 状态有：uploading done error removed
-            response: '{"status": "success"}', // 服务端响应内容
-            linkProps: '{"download": "image"}', // 下载链接额外的 HTML 属性
-         },errorMsg:'成功上传至暂存文件夹',avatarName})
+        let avatarName = name + time + userId+'.' + type;
+        let newPath = form.uploadDir + "/";
+        let newName=form.uploadDir + "/" + avatarName;
+        fs.renameSync(files.avatar.path, newName);  //重命名
+        cosUpload(newPath,avatarName).then(result=>{
+            return res.json({file:{
+                uid: name + time + userId,      // 文件唯一标识，建议设置为负数，防止和内部产生的 id 冲突
+                name: avatarName,  // 文件名
+                status: 'done', // 状态有：uploading done error removed
+                response: '{"status": "success"}', // 服务端响应内容
+                linkProps: '{"download": "image"}', // 下载链接额外的 HTML 属性
+                cosUpload:result,
+             },errorMsg:'成功上传至暂存文件夹',avatarName})
+        },rej=>{
+            return res.json({file:{
+                uid: 'uid',      // 文件唯一标识，建议设置为负数，防止和内部产生的 id 冲突
+                name: avatarName,  // 文件名
+                status: 'done', // 状态有：uploading done error removed
+                response: '{"status": "error"}', // 服务端响应内容
+                linkProps: '{"download": "image"}', // 下载链接额外的 HTML 属性
+                cosUpload:rej,
+             },errorMsg:'成功上传至暂存文件夹',avatarName})
+        }).catch(error=>{
+            console.log(error)
+        })
+
     })
 })
 module.exports = Router
-
+function transferUpload(req,res){
+    const {userId}=req.cookies
+    return new Promise((resolve,reject)=>{
+        let form = new formidable.IncomingForm();
+        form.encoding = 'utf-8';
+        form.uploadDir = path.join(__dirname + "/../page/upload");
+        form.keepExtensions = true;//保留后缀
+        form.maxFieldsSize = 2 * 1024 * 1024;
+        form.parse(req, function (err, fields, files){
+            let filename = files.avatar.name
+            let nameArray = filename.split('.');
+            let type = nameArray[nameArray.length - 1];
+            let name = '';
+            for (let i = 0; i < nameArray.length - 1; i++) {
+                name = name + nameArray[i];
+            }
+            let date = new Date();
+            let time = '_' + date.getFullYear() + "_" + date.getMonth() + "_" + date.getDay() + "_" + date.getHours() + "_" + date.getMinutes();
+            let avatarName = name + time + '.' + type;
+            let newPath = form.uploadDir + "/" + avatarName;
+            fs.renameSync(files.avatar.path, newPath);
+            resolve({data:1,name:avatarName})
+        })
+    })
+}
 function cosUpload(__dirname,name){
+    return new Promise((resolve,reject)=>{
         cos.putObject({
             Bucket: Bucket,
             Region: Region,
-            Key: '1.jpg',
-            Body: fs.readFileSync(path.resolve(__dirname, '1.jpg'))
+            Key: name,
+            Body: fs.readFileSync(path.resolve(__dirname, name))
         }, function (err, data) {
             if(err){
-                console.log(err)
+                reject({code:1,error:err})
             }else{
-                return data
+                resolve({coed:0,data:data})
             }
         });
+    })
 }

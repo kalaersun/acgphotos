@@ -16,7 +16,6 @@ app.use('/album',albumRouter)
 app.get('/',function(req,res){
 	res.send('<h1>Hello world</h1>')
 })
-
 app.get('/photolist',(req,res)=>{
 	let file="./data.json";
 	let result=JSON.parse(fs.readFileSync(file));
