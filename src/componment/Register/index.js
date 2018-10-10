@@ -2,9 +2,10 @@ import React from 'react'
 import {Button,Input} from 'antd';
 import './index.scss'
 import {connect} from 'react-redux'
-import {Redirect} from 'react-router-dom'
+import {Redirect,withRouter} from 'react-router-dom'
 import {register} from '../../redux/user.redux'
 import { message } from 'antd';
+@withRouter
 @connect(
     state=>state.user,{register}
 )

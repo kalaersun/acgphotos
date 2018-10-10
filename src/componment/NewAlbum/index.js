@@ -12,30 +12,34 @@ export default class NewAlbum extends React.Component {
             author: '',
             loading: false,
             coverImg: '',
-            bannerImg:''
+            coverImgUrl:'',
+            bannerImg:'',
+            bannerImgUrl:''
         }
     }
-    handleChange = (key, value) => {
+    handleInputChange = (key, e) => {
         this.setState({
-            [key]: value
+            [key]: e.target.value
         })
     }
-    handleFileChange = (key,info) => {
-        console.log(11)
+    handleUploadChange = (key,info) => {
         if (info.file.status === 'uploading') {
             this.setState({ loading: true });
             return;
         }
-        console.log(key)
         if (info.file.status === 'done') {
-            console.log(info)
-            getBase64(info.file.originFileObj, imageUrl => this.setState({
-                [key]:imageUrl,
+            let coverImgUrl=info.file.response.avatarName
+            this.setState({
+                coverImgUrl
+            })
+            getBase64(info.file.originFileObj, img => this.setState({
+                [key]:img,
                 loading: false,
             }));
         }
     }
     render() {
+        console.log(this.state)
         const { activityName, classIfy, className, author, imageUrl,coverImg } = this.state
         const uploadButton = (
             <div>
@@ -53,8 +57,7 @@ export default class NewAlbum extends React.Component {
                     活动名称
                 </div>
                 <div className="new-album-name-input">
-                    <Input value={activityName} onChange={value => { 
-                        console.log(value);this.handleChange.bind(this, 'activityName', value) }} />
+                    <Input value={activityName} onChange={this.handleInputChange.bind(this, 'activityName')} />
                 </div>
             </div>
 
@@ -66,7 +69,7 @@ export default class NewAlbum extends React.Component {
                     showUploadList={true}
                     action="/album/tmpUploadFile"
                     beforeUpload={beforeUpload}
-                    onChange={value=>{console.log(value)}}
+                    onChange={this.handleUploadChange.bind(this,'coverImg')}
                 >
                 {coverImg ? <img src={coverImg} alt="avatar" /> : uploadButton}
                 </Upload>
@@ -79,7 +82,7 @@ export default class NewAlbum extends React.Component {
                     照片分类
                 </div>
                 <div className="new-album-name-input">
-                    <Input value={activityName} onChange={value => { this.handleChange.bind(this, 'activityName', value) }} />
+                    <Input value={activityName} onChange={value => { this.handleInputChange.bind(this, 'activityName', value) }} />
                     <Button type="primary">确认增加</Button>
                 </div>
 

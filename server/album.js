@@ -54,14 +54,7 @@ Router.post('/tmpUploadFile',function(req,res){
         let newName=form.uploadDir + "/" + avatarName;
         fs.renameSync(files.avatar.path, newName);  //重命名
         cosUpload(newPath,avatarName).then(result=>{
-            return res.json({file:{
-                uid: name + time + userId,      // 文件唯一标识，建议设置为负数，防止和内部产生的 id 冲突
-                name: avatarName,  // 文件名
-                status: 'done', // 状态有：uploading done error removed
-                response: '{"status": "success"}', // 服务端响应内容
-                linkProps: '{"download": "image"}', // 下载链接额外的 HTML 属性
-                cosUpload:result,
-             },errorMsg:'成功上传至暂存文件夹',avatarName})
+            return res.json({avatarName,errorMsg:'成功上传至暂存文件夹',code:0})
         },rej=>{
             return res.json({file:{
                 uid: 'uid',      // 文件唯一标识，建议设置为负数，防止和内部产生的 id 冲突
@@ -70,7 +63,7 @@ Router.post('/tmpUploadFile',function(req,res){
                 response: '{"status": "error"}', // 服务端响应内容
                 linkProps: '{"download": "image"}', // 下载链接额外的 HTML 属性
                 cosUpload:rej,
-             },errorMsg:'成功上传至暂存文件夹',avatarName})
+             },errorMsg:'成功上传至暂存文件夹',code:1})
         }).catch(error=>{
             console.log(error)
         })

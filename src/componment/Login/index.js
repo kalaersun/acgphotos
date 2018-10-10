@@ -3,8 +3,9 @@ import {Button,Input} from 'antd';
 import './index.scss'
 import {connect} from 'react-redux'
 import {login} from '../../redux/user.redux'
-import {Redirect} from 'react-router-dom'
+import {Redirect,withRouter} from 'react-router-dom'
 import { message} from 'antd';
+@withRouter
 @connect(
     state=>state.user,{login}
 )
@@ -36,7 +37,7 @@ class Login extends React.Component{
         const {username,password}=this.state
         return(
             <div className="login-module">
-            {this.props.redirectTo?<Redirect to={this.props.redirectTo}/>:null}
+            {this.props.redirectTo!==""?<Redirect to={this.props.redirectTo}/>:null}
                 <div className="login-module-section">
                     <div className="login-module-section-title">
                         用户名：
