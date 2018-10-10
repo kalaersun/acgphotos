@@ -21,13 +21,13 @@ const models={
 		'author':{type:String,require:true},
 		'coverPic':{type:String,require:true},
 		'bannerPic':{type:String,require:true},
-		'title':{type:String,require:true},
 		'desc':{type:String},
 		'date':{type:String,require:true},
 	},
 	classIfy:{
 		'albumId':{type:String,require:true},
-		'title':{type:String,require:true}
+		'title':{type:String,require:true},
+		'date':{type:String,require:true}
 	},
 	photoList:{
 		'classIfyId':{type:String,require:true},

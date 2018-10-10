@@ -12,7 +12,7 @@ class PhotoWaterFall extends React.Component {
             containerWidth: ''
         }
     }
-    componentWillMount() {
+    componentDidMount() {
         window.addEventListener('resize', () => {
             this.setState({
                 containerWidth: ReactDOM.findDOMNode(this.refs.container).clientWidth

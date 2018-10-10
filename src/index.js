@@ -9,6 +9,7 @@ import AuthRouter from './componment/AuthRouter'
 import PhotoList from './componment/PhotoList'
 import CardList from './componment/CardList'
 import NewAlbum from './componment/NewAlbum'
+import EditAlbum from './componment/EditAlbum'
 import { Provider } from 'react-redux'
 import {BrowserRouter,Route} from 'react-router-dom'
 import reducers from './redux/reducer'
@@ -26,6 +27,7 @@ ReactDOM.render(
                 <Route path='/photolist' component={PhotoList}></Route>
                 <Route path='/cardlist' component={CardList}></Route>
                 <Route path='/newalbum' component={NewAlbum}></Route>
+                <Route path='/editalbum' component={EditAlbum}></Route>
             </div>
         </BrowserRouter>
     </Provider>, document.getElementById('root'));

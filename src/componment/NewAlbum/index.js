@@ -2,10 +2,8 @@ import React from 'react'
 import './index.scss'
 import { Input, Upload, Icon, message, Button ,Select} from 'antd'
 import { getBase64, beforeUpload } from '../../util'
-import { connect } from 'react-redux'
-@connect(
-    state => state.user
-)
+import {Redirect} from 'react-router-dom'
+import axios from 'axios'
 class NewAlbum extends React.Component {
     constructor() {
         super()
@@ -19,7 +17,8 @@ class NewAlbum extends React.Component {
             coverImg: '',
             coverImgUrl: '',
             bannerImg: '',
-            bannerImgUrl: ''
+            bannerImgUrl: '',
+            canSubmit:true,
         }
     }
     handleInputChange = (key, e) => {
@@ -36,7 +35,8 @@ class NewAlbum extends React.Component {
         })
         this.setState({
             classIfy,
-            classIfyOption:id
+            classIfyOption:id,
+            classIfyName:''
         })
     }
     removeclassIfy=(key)=>{
@@ -44,19 +44,21 @@ class NewAlbum extends React.Component {
         let newClassIfy=classIfy.filter(el=>{
             if(el.id!==key){return true}
         })
-        console.log(newClassIfy)
+        
         if(newClassIfy.length!==0)
         {
+            let classIfyOption=newClassIfy[0].id
+            console.log(newClassIfy,classIfyOption)
             this.setState({
                 classIfy:newClassIfy,
-                classIfyOption:newClassIfy[0].id,
-                classIfyName: ''
+                classIfyOption,
+                classIfyName:''
             })
         }else{
             this.setState({
-                classIfy:'',
+                classIfy:[],
                 classIfyOption:0,
-                classIfyName: '',
+                classIfyName:'',
             })
         }
 
@@ -84,12 +86,38 @@ class NewAlbum extends React.Component {
         })
     }
     submitNewAlbum=()=>{
+        const { classIfy, bannerImgUrl, author, coverImgUrl ,activityName,canSubmit} = this.state
+        let postData={
+            activityName,
+            author,
+            coverPic:coverImgUrl,
+            bannerPic:bannerImgUrl,
+            desc:'',
+            classIfy
+        }
+        if(!canSubmit){
+            message.error("已发送建立请求，请耐心等待")
+        }
+        this.setState({
+            canSubmit:false
+        },()=>{
+            axios.post('/album/newalbum',postData).then(res => {
+                if(res.request.status===200&&res.data.code===0){
+                    message.success(res.data.error_Msg)
+                    this.setState({
+                        canSubmit:true,
+                        albumId:res.data.albumId
+                    })
+                }else{
+                    console.error(res.data.error)
+                }
+            })
+        })
 
     }
     render() {
-        console.log(this.state)
         const Option = Select.Option;
-        const { classIfy, className, author, coverImg ,bannerImg,classIfyName,classIfyOption} = this.state
+        const { classIfy,  author,activityName, coverImg ,bannerImg,classIfyName,classIfyOption,albumId} = this.state
         const uploadButton = (
             <div>
                 <Icon type={this.state.loading ? 'loading' : 'plus'} />
@@ -97,6 +125,7 @@ class NewAlbum extends React.Component {
             </div>
         );
         return (<div className="new-album">
+            {albumId&&<Redirect to={'/editalbum?id='+albumId}/>}
             <div className="new-album-section">
                 <p><Icon type="hdd" theme="outlined" />新建相册</p>
                 <p>（新建相册必须上传封面以及横幅）</p>
@@ -106,7 +135,7 @@ class NewAlbum extends React.Component {
                     活动名称
                 </div>
                 <div className="new-album-name-input">
-                    <Input value={className} onChange={this.handleInputChange.bind(this, 'className')} />
+                    <Input value={activityName} onChange={this.handleInputChange.bind(this, 'activityName')} />
                 </div>
             </div>
             <div className="new-album-section">
@@ -150,7 +179,7 @@ class NewAlbum extends React.Component {
                     <Button type="primary" onClick={this.addClassify}>新增</Button>
                 </div>
                 <div className="new-album-section-select" >
-                    {classIfy.length!==0&&<Select style={{width:'230px',marginTop:'10px'}} value={classIfyOption}  onChange={this.handleClassifyChange}>
+                    {classIfy.length!==0&&<Select style={{width:'230px',marginTop:'10px'}}  value={classIfyOption} >
                                     {
                                         classIfy.map((el,index)=>{
                                             return (<Option key={index} value={el.id}>{el.title}<Icon type="close" theme="outlined" onClick={this.removeclassIfy.bind(this,el.id)}/></Option>)
@@ -167,7 +196,7 @@ class NewAlbum extends React.Component {
                     <Input value={author} style={{width:'230px'}} onChange={this.handleInputChange.bind(this, 'author')} />
                 </div>
             </div>
-            <Button className="new-album-button" type="primary">新建相册</Button>
+            <Button className="new-album-button" type="primary" onClick={this.submitNewAlbum}>新建相册</Button>
         </div>)
     }
 }

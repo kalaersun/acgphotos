@@ -3,6 +3,8 @@ const Router = express.Router()
 const model = require('./models')
 const utils =require('utility')
 const User= model.getModel('user')
+const Classify= model.getModel('classIfy')
+const Album= model.getModel('album')
 const _filter = {'password':0,'__v':0}
 Router.get('/info',function(req,res){
 	const {userId}=req.cookies
@@ -18,7 +20,7 @@ Router.get('/info',function(req,res){
 	})
 })
 Router.get('/list',function (req,res){
-	User.find({},function(error,doc){
+	Album.find({},function(error,doc){
 		return res.json(doc)
 	})
 })
