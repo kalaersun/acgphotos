@@ -16,7 +16,6 @@ const SecretKey = 'vwpT3SgihS7c5SflHh9RgyErLxhWLpcF';    // 替换为用户的 S
 const Bucket = 'acgphotos-1253197050';                        // 替换为用户操作的 Bucket
 const Region = 'ap-shanghai';                           // 替换为用户操作的 Region
 let cos = new COS({SecretId: SecretId, SecretKey: SecretKey});
-
 Router.post('/newAlbum',function(req,res){
     const AlbumModel = new album()
     const ClassIfyModel = new ClassIfy()
@@ -33,50 +32,32 @@ Router.post('/newAlbum',function(req,res){
 	})
 })
 Router.post('/tmpUploadFile',function(req,res){
-    let form = new formidable.IncomingForm();
-    const {userId}=req.cookies
-    form.encoding = 'utf-8';
-    form.uploadDir = path.join(__dirname + "/../page/upload");
-    form.keepExtensions = true;//保留后缀
-    form.maxFieldsSize = 2 * 1024 * 1024;
-    form.parse(req, function (err, fields, files){
-        let filename = files.avatar.name
-        let nameArray = filename.split('.');
-        let type = nameArray[nameArray.length - 1];
-        let name = '';
-        for (let i = 0; i < nameArray.length - 1; i++) {
-            name = name + nameArray[i];
-        }
-        let date = new Date();
-        let time = '_' + date.getFullYear() + "_" + date.getMonth() + "_" + date.getDay() + "_" + date.getHours() + "_" + date.getMinutes();
-        let avatarName = name + time + userId+'.' + type;
-        let newPath = form.uploadDir + "/";
-        let newName=form.uploadDir + "/" + avatarName;
-        fs.renameSync(files.avatar.path, newName);  //重命名
-        cosUpload(newPath,avatarName).then(result=>{
-            return res.json({avatarName,errorMsg:'成功上传至暂存文件夹',code:0})
-        },rej=>{
-            return res.json({file:{
-                uid: 'uid',      // 文件唯一标识，建议设置为负数，防止和内部产生的 id 冲突
-                name: avatarName,  // 文件名
-                status: 'done', // 状态有：uploading done error removed
-                response: '{"status": "error"}', // 服务端响应内容
-                linkProps: '{"download": "image"}', // 下载链接额外的 HTML 属性
-                cosUpload:rej,
-             },errorMsg:'成功上传至暂存文件夹',code:1})
-        }).catch(error=>{
-            console.log(error)
-        })
-
+    transferUpload(req,res).then(result=>{
+        let avatarName=result.avatarName
+        return res.json({avatarName,errorMsg:'成功上传到暂存文件夹，保存后生效',code:0})
+    },rej=>{
+        return res.json({errorMsg:'上传到暂存文件夹失败，请稍后再试',code:1})
+    }).catch(error=>{
+        return res.json({error,code:1})
     })
 })
 module.exports = Router
+/*cosUpload(newPath,avatarName).then(result=>{
+            return res.json({avatarName,errorMsg:'成功上传到暂存文件夹，保存后生效',code:0})
+        },rej=>{
+            return res.json({avatarName,errorMsg:'上传到暂存文件夹失败，请稍后再试',code:1})
+        }).catch(error=>{
+            console.log(error)
+        }) */
 function transferUpload(req,res){
     const {userId}=req.cookies
+    let date = new Date();
+    let time = '_' + date.getFullYear() + "_" + date.getMonth() + "_" + date.getDay() + "_" + date.getHours() + "_" + date.getMinutes();
     return new Promise((resolve,reject)=>{
         let form = new formidable.IncomingForm();
         form.encoding = 'utf-8';
-        form.uploadDir = path.join(__dirname + "/../page/upload");
+        form.uploadDir = path.join(__dirname + '/../page/upload/');
+        console.log(__dirname,form.uploadDir)
         form.keepExtensions = true;//保留后缀
         form.maxFieldsSize = 2 * 1024 * 1024;
         form.parse(req, function (err, fields, files){
@@ -87,12 +68,11 @@ function transferUpload(req,res){
             for (let i = 0; i < nameArray.length - 1; i++) {
                 name = name + nameArray[i];
             }
-            let date = new Date();
-            let time = '_' + date.getFullYear() + "_" + date.getMonth() + "_" + date.getDay() + "_" + date.getHours() + "_" + date.getMinutes();
-            let avatarName = name + time + '.' + type;
-            let newPath = form.uploadDir + "/" + avatarName;
-            fs.renameSync(files.avatar.path, newPath);
-            resolve({data:1,name:avatarName})
+            let avatarName = name + time + userId+'.' + type;
+            let withPathName=form.uploadDir + "/" + avatarName;
+            let avatarPath=form.uploadDir + "/"
+            fs.renameSync(files.avatar.path, withPathName);  //重命名
+            resolve({avatarPath,avatarName})
         })
     })
 }
