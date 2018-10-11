@@ -7,7 +7,7 @@ const COS = require('cos-nodejs-sdk-v5');
 const formidable = require('formidable')
 const gm = require('gm');
 const Album= model.getModel('album')
-const ClassIfy= model.getModel('classIfy')
+const ClassIfyModel= model.getModel('classIfy')
 const PhotoList= model.getModel('photoList')
 const User= model.getModel('user')
 const _filter = {'password':0,'__v':0}
@@ -43,6 +43,27 @@ Router.post('/tmpUploadFile',function(req,res){
         return res.json({errorMsg:'上传到暂存文件夹失败，请稍后再试',code:1})
     }).catch(error=>{
         return res.json({error,code:1})
+    })
+})
+Router.post('/info',function(req,res){
+    const {albumId}=req.body
+    Album.findOne({_id:albumId},function(err,doc){
+        if(err){
+            return res.json({code:1,errorMsg:'服务器错误',error:err})
+        }else{
+            const {activityName,author,coverPic,bannerPic,desc,date}=doc
+            ClassIfyModel.find({albumId},function(err,doc){
+                if(err){
+                    return res.json({code:1,errorMsg:'服务器错误',error:err})
+                }else{
+                    let classIfy=doc.map(el=>{
+                        return {id:el._id,title:el.title,date:el.date}
+                    })
+                    let photoList=[]
+                    return res.json({code:0,errorMsg:'查询成功',data:{activityName,author,coverPic,bannerPic,desc,date,classIfy,photoList}})
+                }
+            })
+        }
     })
 })
 module.exports = Router
@@ -114,7 +135,7 @@ function addClassify(req,albumId){
     return new Promise((resolve,reject)=>{
         let result=[]
         classIfy.forEach(el=>{
-            new ClassIfy({albumId:albumId,title:el.title,date:new Date().getTime()}).save((err,doc)=>{
+            new ClassIfyModel({albumId:albumId,title:el.title,date:new Date().getTime()}).save((err,doc)=>{
                 if(err){
                     reject({code:1,errorMsg:'服务器出现错误',error:err})
                 }else{
