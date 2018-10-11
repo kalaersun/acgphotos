@@ -33,7 +33,8 @@ const models={
 		'classIfyId':{type:String,require:true},
 		'src':{type:String,require:true},
 		'height':{type:String,require:true},
-		'viewNumber':{type:Number,require:true},
+		'width':{type:String,require:true},
+		'viewNumber':{type:Number},
 		'date':{type:String,require:true}
 	},
 }

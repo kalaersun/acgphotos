@@ -8,7 +8,7 @@ const formidable = require('formidable')
 const gm = require('gm');
 const Album= model.getModel('album')
 const ClassIfyModel= model.getModel('classIfy')
-const PhotoList= model.getModel('photoList')
+const PhotoListModel= model.getModel('photoList')
 const User= model.getModel('user')
 const _filter = {'password':0,'__v':0}
 const SecretId = 'AKIDmPu5HU8IPMBpNvNtMk3DczEKEze734gP'; // 替换为用户的 SecretId
@@ -36,13 +36,34 @@ Router.post('/newAlbum',function(req,res){
     })
 })
 Router.post('/tmpUploadFile',function(req,res){
-    transferUpload(req,res).then(result=>{
+    const {userId}=req.cookies
+    transferUpload(req,res,userId).then(result=>{
         let avatarName=result.avatarName
         return res.json({avatarName,errorMsg:'成功上传到暂存文件夹，保存后生效',code:0})
     },rej=>{
         return res.json({errorMsg:'上传到暂存文件夹失败，请稍后再试',code:1})
     }).catch(error=>{
         return res.json({error,code:1})
+    })
+})
+Router.post('/batchUploadFile',function(req,res){
+    const { classIfyId } = req.body
+    transferUpload(req, res, classIfyId).then(result => {
+        return cosUpload(result.avatarName)
+    }).then(cosResult => {
+        let url = cosResult.data.Location
+        let size=gm(path + cosResult.avatarName).size((err, size) => {
+            if(!err){
+                return size
+            }
+        })
+        console.log(size.size())
+        return addPhotoList(classIfyId, height, width, url)
+    }).then(uploadres => {
+        return res.json({ code: 0, errorMsg: '成功上传' })
+    }
+    ).catch(error => {
+        return res.json({ code: 1, error })
     })
 })
 Router.post('/info',function(req,res){
@@ -74,8 +95,7 @@ module.exports = Router
         }).catch(error=>{
             console.log(error)
         }) */
-function transferUpload(req,res){
-    const {userId}=req.cookies
+function transferUpload(req,res,Id){
     return new Promise((resolve,reject)=>{
         let form = new formidable.IncomingForm();
         form.encoding = 'utf-8';
@@ -92,11 +112,10 @@ function transferUpload(req,res){
             for (let i = 0; i < nameArray.length - 1; i++) {
                 name = name + nameArray[i];
             }
-            let avatarName = name + time + userId+'.' + type;
-            let withPathName=form.uploadDir + "/" + avatarName;
-            let avatarPath=form.uploadDir + "/"
+            let avatarName = name + time + Id+'.' + type;
+            let withPathName=form.uploadDir +  avatarName;
             fs.renameSync(files.avatar.path, withPathName);  //重命名
-            resolve({avatarPath,avatarName})
+            resolve({avatarName})
         })
     })
 }
@@ -111,7 +130,7 @@ function cosUpload(name){
             if(err){
                 reject({code:1,error:err})
             }else{
-                resolve({coed:0,data:data})
+                resolve({coed:0,data:data,avatarName:name})
             }
         });
     })
@@ -144,5 +163,16 @@ function addClassify(req,albumId){
             })
         })
         resolve({result})
+    })
+}
+function addPhotoList(classIfyId,src,height,width){
+    return new Promise((resolve,reject)=>{
+        new PhotoListModel({classIfyId,src,height,width,viewNumber:0,date:new Date().getTime()}).save((err,doc)=>{
+            if(err){
+                reject({code:1,errorMsg:'服务器出现错误',error:err})
+            }else{
+                resolve({result:doc})
+            }
+        })
     })
 }

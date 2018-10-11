@@ -5,6 +5,7 @@ const utils =require('utility')
 const User= model.getModel('user')
 const Classify= model.getModel('classIfy')
 const Album= model.getModel('album')
+const photoList= model.getModel('photoList')
 const _filter = {'password':0,'__v':0}
 Router.get('/info',function(req,res){
 	const {userId}=req.cookies
@@ -20,7 +21,7 @@ Router.get('/info',function(req,res){
 	})
 })
 Router.get('/list',function (req,res){
-	Album.find({},function(error,doc){
+	photoList.find({},function(error,doc){
 		return res.json(doc)
 	})
 })
