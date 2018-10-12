@@ -60,15 +60,23 @@ class PhotoWaterFall extends React.Component {
                 <AutoResponsive ref="container" {...this.getAutoResponsiveProps()}>
                     {
                         this.state.data.map((el, index) => {
-                            let style = {
-                                width: picWidth,
-                                height: picHeight,
-                            };
-                            return (
+                                let image = new Image();
+                                image.src=el.src
+                                let height=picHeight
+                   {/*              image.onload= await function(){
+                                    height=image.height
+                                    console.log(image.height)
+                                } */}
+                                let style = {
+                                        width: picWidth,
+                                        height: height,
+                                }
+                                return (
                                     <div key={index}  className={`${el.w} album item`} style={style}>
                                         <Zmage alt=""  backdrop="gray" style={{'width':picWidth,height:'100%',marginTop:'3px'}} src={el.src} />
                                     </div>
-                            );
+                                    );
+
                         })
                     }
                 </AutoResponsive>
