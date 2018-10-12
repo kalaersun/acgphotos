@@ -48,22 +48,18 @@ Router.post('/tmpUploadFile',function(req,res){
 })
 Router.post('/batchUploadFile',function(req,res){
     const { classIfyId } = req.body
+    let cosrUrl=''
     transferUpload(req, res, classIfyId).then(result => {
         return cosUpload(result.avatarName)
     }).then(cosResult => {
-        let url = cosResult.data.Location
-        let size=gm(path + cosResult.avatarName).size((err, size) => {
-            if(!err){
-                return size
-            }
-        })
-        console.log(size.size())
-        return addPhotoList(classIfyId, height, width, url)
-    }).then(uploadres => {
+        cosrUrl=cosResult.data.Location
+        return getImageWH(cosrUrl)
+    }).then(result=>{
+        return addPhotoList(classIfyId, result.width, result.height, result.avatarName)
+    }).then(result => {
         return res.json({ code: 0, errorMsg: '成功上传' })
-    }
-    ).catch(error => {
-        return res.json({ code: 1, error })
+    }).catch(error => {
+        return res.json({ code: 1, error:error.err })
     })
 })
 Router.post('/info',function(req,res){
@@ -72,7 +68,7 @@ Router.post('/info',function(req,res){
         if(err){
             return res.json({code:1,errorMsg:'服务器错误',error:err})
         }else{
-            const {activityName,author,coverPic,bannerPic,desc,date}=doc
+            //const {activityName,author,coverPic,bannerPic,desc,date}=doc
             ClassIfyModel.find({albumId},function(err,doc){
                 if(err){
                     return res.json({code:1,errorMsg:'服务器错误',error:err})
@@ -81,20 +77,13 @@ Router.post('/info',function(req,res){
                         return {id:el._id,title:el.title,date:el.date}
                     })
                     let photoList=[]
-                    return res.json({code:0,errorMsg:'查询成功',data:{activityName,author,coverPic,bannerPic,desc,date,classIfy,photoList}})
+                    return res.json({code:0,errorMsg:'查询成功',/* data:{activityName,author,coverPic,bannerPic,desc,date,classIfy,photoList} */})
                 }
             })
         }
     })
 })
 module.exports = Router
-/*cosUpload(newPath,avatarName).then(result=>{
-            return res.json({avatarName,errorMsg:'成功上传到暂存文件夹，保存后生效',code:0})
-        },rej=>{
-            return res.json({avatarName,errorMsg:'上传到暂存文件夹失败，请稍后再试',code:1})
-        }).catch(error=>{
-            console.log(error)
-        }) */
 function transferUpload(req,res,Id){
     return new Promise((resolve,reject)=>{
         let form = new formidable.IncomingForm();
@@ -130,7 +119,7 @@ function cosUpload(name){
             if(err){
                 reject({code:1,error:err})
             }else{
-                resolve({coed:0,data:data,avatarName:name})
+                resolve({err})
             }
         });
     })
@@ -141,7 +130,7 @@ function addAlbum(data){
 		const AlbumModel = new Album({userId:userId,activityName,author,coverPic,bannerPic,desc,date:new Date().getTime()})
 		AlbumModel.save((err,doc)=>{
 			if(err){
-                reject({code:1,errorMsg:'服务器出现错误',error:err})
+                reject({err})
 			}else{
                 const {_id}=doc
 				resolve({albumId:_id})
@@ -156,7 +145,7 @@ function addClassify(req,albumId){
         classIfy.forEach(el=>{
             new ClassIfyModel({albumId:albumId,title:el.title,date:new Date().getTime()}).save((err,doc)=>{
                 if(err){
-                    reject({code:1,errorMsg:'服务器出现错误',error:err})
+                    reject({err})
                 }else{
                     result.push(doc)
                 }
@@ -167,11 +156,24 @@ function addClassify(req,albumId){
 }
 function addPhotoList(classIfyId,src,height,width){
     return new Promise((resolve,reject)=>{
-        new PhotoListModel({classIfyId,src,height,width,viewNumber:0,date:new Date().getTime()}).save((err,doc)=>{
+        console.log(classIfyId,src,height,width)
+        new PhotoListModel({classIfyId,src,width,height,viewNumber:0,date:new Date().getTime()}).save((err,doc)=>{
             if(err){
-                reject({code:1,errorMsg:'服务器出现错误',error:err})
+                reject({err})
             }else{
                 resolve({result:doc})
+            }
+        })
+    })
+}
+function getImageWH(avatarName){
+    return new Promise((resolve,reject)=>{
+        console.log(avatarName)
+        gm(avatarName).size((err,result)=>{
+            if(!err){
+                resolve({result,avatarName})
+            }else{
+                reject({err})
             }
         })
     })

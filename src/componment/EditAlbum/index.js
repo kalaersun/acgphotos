@@ -27,10 +27,10 @@ class EditAlbum extends React.Component {
         axios.post('/album/info',{albumId}).then(res => {
             if(res.request.status===200&&res.data.code===0){
                 message.success(res.data.error_Msg)
-                const {activityName,date,classIfy,photoList,bannerPic,coverPic,desc}=res.data.data
+/*                 const {activityName,date,classIfy,photoList,bannerPic,coverPic,desc}=res.data.data
                 this.setState({
                     activityName,date,classIfy,photoList,bannerPic,coverPic,desc
-                })
+                }) */
             }else{
                 console.error("error")
             }
