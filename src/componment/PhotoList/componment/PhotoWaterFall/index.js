@@ -4,15 +4,18 @@ import AutoResponsive from 'autoresponsive-react'
 import axios from 'axios';
 import './index.scss'
 import Zmage from 'react-zmage'
+import {BackTop,Icon,Modal} from 'antd'
+import QRCode from 'qrcode.react'
 class PhotoWaterFall extends React.Component {
     constructor(props) {
         super(props)
         this.state = {
             data: [],
-            containerWidth: ''
+            containerWidth: '',
+            showModal:false
         }
     }
-    componentDidMount() {
+    componentWillMount() {
         window.addEventListener('resize', () => {
             this.setState({
                 containerWidth: ReactDOM.findDOMNode(this.refs.container).clientWidth
@@ -52,34 +55,62 @@ class PhotoWaterFall extends React.Component {
             return containerWidth/3 - margin
         }
     }
+    showShareModal=(toatl)=>{
+        this.props.setTotalView(toatl)
+        this.setState({
+            showModal:true
+        })
+    }
+    hideShareModal=()=>{
+        this.setState({
+            showModal:false
+        })
+    }
+    view=_id=>{
+        axios.post('/album/addview',{_id}).then(res => {})
+    }
     render() {
         let picWidth  = this.getPicWidth()
-        let picHeight = (picWidth/16)*9
+        let total=0
         return (
             <div className="photo-water-fall">
+                    <Modal
+                        visible={this.state.showModal}
+                        centered
+                        maskClosable
+                        footer={null}
+                        width={176}
+                        closable={false}
+                        onCancel={this.hideShareModal}
+                    >
+                    <QRCode value={window.location.href}/>
+                    </Modal>
                 <AutoResponsive ref="container" {...this.getAutoResponsiveProps()}>
                     {
-                        this.state.data.map((el, index) => {
-                                let image = new Image();
-                                image.src=el.src
-                                let height=picHeight
-                   {/*              image.onload= await function(){
-                                    height=image.height
-                                    console.log(image.height)
-                                } */}
-                                let style = {
-                                        width: picWidth,
-                                        height: height,
-                                }
-                                return (
-                                    <div key={index}  className={`${el.w} album item`} style={style}>
-                                        <Zmage alt=""  backdrop="gray" style={{'width':picWidth,height:'100%',marginTop:'3px'}} src={el.src} />
+                        this.props.photoList.map((el, index) => {
+                            let style = {
+                                width: picWidth,
+                                height: (picWidth*el.height)/el.width,
+                            };
+                            total+=el.viewNumber
+                            return (
+                                    <div key={index}  className='album-item' style={style}>
+                                        <Zmage alt=""  backdrop="gray" style={{'width':picWidth,height:'100%'}} src={"https://"+el.src} onMouseEnter={this.view.bind(this,el._id)}/>
+                                        {el.viewNumber!==0&&<div className="view-time">
+                                            <Icon type="eye" style={{fontSize:'20px;'}}theme="outlined" />
+                                            {el.viewNumber}
+                                        </div>}
                                     </div>
-                                    );
-
+                            );
                         })
                     }
                 </AutoResponsive>
+                <BackTop/>
+                <BackTop id="share" visibilityHeight={0} onClick={this.showShareModal.bind(this,total)}>
+                    <div className="share-button">
+                    <Icon type="share-alt" theme="outlined" />
+                    </div>
+                </BackTop>
             </div>
         )
     }

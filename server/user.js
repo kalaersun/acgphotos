@@ -25,6 +25,16 @@ Router.get('/list',function (req,res){
 		return res.json(doc)
 	})
 })
+Router.get('/alist',function (req,res){
+	Album.find({},function(error,doc){
+		return res.json(doc)
+	})
+})
+Router.get('/plist',function (req,res){
+	photoList.find({},function(error,doc){
+		return res.json(doc)
+	})
+})
 Router.post('/register',function(req,res){
 	const {username,password}=req.body
 	User.findOne({username:username},function(err,hasdoc){

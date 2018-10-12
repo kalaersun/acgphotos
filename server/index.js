@@ -12,7 +12,6 @@ app.use(bodyParser.json())
 
 app.use('/user',userRouter)
 app.use('/album',albumRouter)
-
 app.get('/',function(req,res){
 	res.send('<h1>Hello world</h1>')
 })

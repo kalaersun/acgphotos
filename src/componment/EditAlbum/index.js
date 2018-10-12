@@ -1,7 +1,7 @@
 import React from 'react'
 import './index.scss'
 import { Input, Upload, Icon, message, Button, Select } from 'antd'
-import { getBase64, beforeUpload, getQueryString,formatDate} from '../../util'
+import { getBase64, beforeUpload, getQueryString, formatDate } from '../../util'
 import { Redirect, withRouter } from 'react-router-dom'
 import moment from 'moment'
 import axios from 'axios'
@@ -13,25 +13,25 @@ class EditAlbum extends React.Component {
             albumId: '',
             photoList: [],
             activityName: '',
-            activityClassIfySelected:'',
+            activityClassIfySelected: '',
             classIfy: [],
-            author:'',
-            date:'',
-            bannerPic:'',
-            coverPic:'',
-            desc:''
+            author: '',
+            date: '',
+            bannerPic: '',
+            coverPic: '',
+            desc: ''
         }
     }
     componentDidMount() {
         let albumId = getQueryString('id')
-        axios.post('/album/info',{albumId}).then(res => {
-            if(res.request.status===200&&res.data.code===0){
+        axios.post('/album/info', { albumId }).then(res => {
+            if (res.request.status === 200 && res.data.code === 0) {
                 message.success(res.data.error_Msg)
-/*                 const {activityName,date,classIfy,photoList,bannerPic,coverPic,desc}=res.data.data
+                const { activityName, date, classIfy, photoList, bannerPic, coverPic, desc } = res.data.data
                 this.setState({
-                    activityName,date,classIfy,photoList,bannerPic,coverPic,desc
-                }) */
-            }else{
+                    albumId, activityName, date, classIfy, photoList, bannerPic, coverPic, desc, activityClassIfySelected: classIfy[0].id
+                })
+            } else {
                 console.error("error")
             }
         })
@@ -41,7 +41,7 @@ class EditAlbum extends React.Component {
             activityClassIfySelected
         })
     }
-    handleUploadChange=(info)=>{
+    handleUploadChange = (info) => {
         const status = info.file.status;
         if (status !== 'uploading') {
             console.log(info.file, info.fileList);
@@ -51,6 +51,10 @@ class EditAlbum extends React.Component {
         } else if (status === 'error') {
             message.error(`${info.file.name} 上传失败.`);
         }
+    }
+    toPhotoList = () => {
+        const { albumId } = this.state
+        this.props.history.push('/photoList?id='+albumId)
     }
     render() {
         const { albumId, photoList, activityName, activityClassIfySelected, classIfy } = this.state
@@ -63,21 +67,21 @@ class EditAlbum extends React.Component {
             </div>
             <div className="edit-album-section">
                 <div className="edit-album-section-title">
-                    活动分类
+                    活动分类 <Icon type="export" theme="outlined" onClick={this.toPhotoList} />
                 </div>
                 <div className="edit-album-section-select">
-                    {classIfy.length !== 0 && <Select style={{width:'100%',marginBottom:'10px'}} value={activityClassIfySelected} onChange={this.handleSelectChange}>
-                    {classIfy.map((el,index)=>{
+                    {classIfy.length !== 0 && <Select style={{ width: '100%', marginBottom: '10px' }} value={activityClassIfySelected} onChange={this.handleSelectChange}>
+                        {classIfy.map((el, index) => {
 
-                        return <Option key={el.id} value={el.id}>{el.title}<span style={{float:'right',marginRight:'10px'}}></span></Option>
-                    })}
+                            return <Option key={el.id} value={el.id}>{el.title}<span style={{ float: 'right', marginRight: '10px' }}></span></Option>
+                        })}
                     </Select>}
                 </div>
                 <div className="edit-album-section-upload">
-                    <Dragger 
+                    <Dragger
                         name="avatar"
                         multiple={true}
-                        data={{classIfyId:activityClassIfySelected}}
+                        data={{ classIfyId: activityClassIfySelected }}
                         action='/album/batchUploadFile'
                         onChange={this.handleUploadChange}>
                         <p className="ant-upload-drag-icon">

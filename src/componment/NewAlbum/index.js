@@ -93,9 +93,9 @@ class NewAlbum extends React.Component {
             desc:'',
             classIfy
         }
-        if(!canSubmit){
+/*         if(!canSubmit){
             message.error("已发送建立请求，请耐心等待")
-        }
+        } */
         this.setState({
             canSubmit:false
         },()=>{
