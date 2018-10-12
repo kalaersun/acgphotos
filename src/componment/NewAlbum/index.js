@@ -44,11 +44,9 @@ class NewAlbum extends React.Component {
         let newClassIfy=classIfy.filter(el=>{
             if(el.id!==key){return true}
         })
-        
         if(newClassIfy.length!==0)
         {
             let classIfyOption=newClassIfy[0].id
-            console.log(newClassIfy,classIfyOption)
             this.setState({
                 classIfy:newClassIfy,
                 classIfyOption,
