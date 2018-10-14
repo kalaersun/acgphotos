@@ -40,7 +40,7 @@ class PhotoListTop extends React.Component {
         return (
             <div className="photo-list-top">
                 <div className="photo-list-top-pic">
-                    <img alt={this.props.activityName} src={"https://" + this.props.bannerPic} />
+                    <img alt={this.props.activityName} src={"https://" + this.props.coverPic} />
                 </div>
                 <div className="photo-list-top-title">
                     <div className="photo-list-top-name">{this.props.activityName}</div>

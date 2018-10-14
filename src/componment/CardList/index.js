@@ -3,7 +3,7 @@ import './index.scss'
 import axios from 'axios'
 import {connect} from 'react-redux'
 import Card from './Card';
-import {Icon} from 'antd'
+import {Icon,message} from 'antd'
 import {withRouter} from 'react-router-dom'
 import moment from 'moment'
 @withRouter
@@ -18,15 +18,17 @@ class CardList extends React.Component {
         }
     }
     componentDidMount(){
-        axios.get('/photolist').then(res => {
+        axios.post('/album/photolist').then(res => {
             this.setState({
-                data: res.data.data
-            }, error => {
+                data: res.data.result
             })
         })
     }
     viewAlbum=(key)=>{
-
+        this.props.history.push('/photoList?id='+key)
+    }
+    editAlbum=(key)=>{
+        this.props.history.push('/editAlbum?id='+key)
     }
     addAlbum=()=>{
         this.props.history.push('/newAlbum')
@@ -45,7 +47,7 @@ class CardList extends React.Component {
                 </div>
             {
                 this.state.data.map((el,index)=>{
-                    return <Card {...el} onClick={this.viewAlbum.bind(this,1)}/>
+                    return <Card {...el}  viewAlbum={this.viewAlbum.bind(this,el._id)} editAlbum={this.editAlbum.bind(this,el._id)}/>
                 })
             }
             </div>

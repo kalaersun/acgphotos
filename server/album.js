@@ -115,6 +115,19 @@ Router.post('/addview',(req,res)=>{
         return res.json({code:1})
     })
 })
+Router.post('/photolist',(req,res)=>{
+	const {userId}=req.cookies
+	Album.find({userId}).exec((err,result)=>{
+        if(!err)
+        {
+            return res.json({result})
+        }
+        else{
+            return res.json({err})
+        }
+    })
+
+})
 module.exports = Router
 //中转存储
 function transferUpload(req){

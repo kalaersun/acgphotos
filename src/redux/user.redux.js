@@ -18,7 +18,7 @@ export function user(state = initState, action) {
         case REGISTER_SUCCESS:
             return { ...state, redirectTo: getRedirectPath(action.data), isAuth: true,...action.data}
         case ERROR_MSG:
-            return { ...action, isAuth: false, }
+            return { ...state, isAuth: false, ...action}
         case LOGIN_SUCCESS:
             return { ...state, redirectTo: getRedirectPath(action.data), isAuth: true }
         case LOAD_DATA: {

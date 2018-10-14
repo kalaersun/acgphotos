@@ -1,28 +1,29 @@
 @import '~antd/dist/antd.css';
 .login-module{
-    width: 350px;
-    height: 280px;
-    top:50%;
-    left:50%;
+    max-width: 320px;
+    margin:0 auto;
+    width: 100%;
+    min-width: 300px;
+    min-height: 600px;
     padding: 10px;
-    position:absolute;
-    text-align: center;
-    background: rgba(24, 144, 255, 0.2);
-    border-radius: 5px;
-    border:1px solid rgba(24, 144, 255, 0.2);
-    transform:translateX(-50%) translateY(-50%);
+    box-sizing:content-box;
+    border-radius: 10px;
+    background-color: #fff;
     .login-module-section{
         margin-top:20px;
         .login-module-section-title{
-            width: 100px;
-            display: inline-block;
+            width: 100%;
+            height: 30px;
+            background: #dcd5d5;
+            line-height: 30px;
+            border-radius: 5px;
+            text-indent: 10px;
+            margin:10px 0px 10px 0px;
         }
         .login-module-section-input{
-            width: 200px;
-            display: inline-block;
         }
         Button{
-            margin-left: 10px;
+            width: 100%;
         }
     }
 }

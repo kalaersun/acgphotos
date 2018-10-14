@@ -31,7 +31,12 @@
         .card-desc-time{
             font-size: 12px;
             color: #888;
+            display: inline-block;
             margin: 4px 0 0 0;  
+        }
+        .card-decc-edit{
+            float: right;
+            margin-left: 10px;
         }
     }
 }

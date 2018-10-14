@@ -106,7 +106,7 @@ class PhotoWaterFall extends React.Component {
                     }
                 </AutoResponsive>
                 <BackTop/>
-                <BackTop id="share" visibilityHeight={0} onClick={this.showShareModal.bind(this,total)}>
+                <BackTop id="share" visibilityHeight={-1} onClick={this.showShareModal.bind(this,total)}>
                     <div className="share-button">
                     <Icon type="share-alt" theme="outlined" />
                     </div>

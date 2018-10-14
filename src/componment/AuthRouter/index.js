@@ -8,12 +8,13 @@ import {connect} from 'react-redux'
 )
 class AuthRoute extends React.Component {
     componentDidMount() {
-        const checkLogin = ['/login', 'register']
+        const checkLogin = ['/login', '/register','/photoList']
         const pathName = this.props.location.pathname
+        //console.log(pathName)
         if (checkLogin.indexOf(pathName) > -1) {
-            return null
-        }
-        axios.get('/user/info')
+            return true
+        }else{
+            axios.get('/user/info')
             .then(res => {
                 if (res.request.status === 200) {
                     if (res.data.code == 0) {
@@ -23,6 +24,7 @@ class AuthRoute extends React.Component {
                     }
                 }
             })
+        }
     }
     render() {
         return null

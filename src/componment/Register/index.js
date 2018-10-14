@@ -35,7 +35,7 @@ class Register extends React.Component{
         const {username,password,confirmPassword}=this.state
         return(
             <div className="login-module">
-            {this.props.redirectTo?<Redirect to={this.props.redirectTo}/>:null}
+            {this.props.redirectTo!=""?<Redirect to={this.props.redirectTo}/>:null}
                 <div className="login-module-section">
                     <div className="login-module-section-title">
                         用户名：
@@ -61,8 +61,8 @@ class Register extends React.Component{
                     </div>
                 </div>
                 <div className="login-module-section">
-                <Button onClick={this.login}>登录</Button>
-                <Button onClick={this.register}>注册</Button>
+                <Button onClick={this.login} type="primary">登录</Button>
+                <Button onClick={this.register} type="primary">注册</Button>
                 </div>
                 {this.props.errorMsg!==""&&message.warn(this.props.errorMsg)}
             </div>

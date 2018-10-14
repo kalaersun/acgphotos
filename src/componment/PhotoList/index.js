@@ -1,6 +1,7 @@
 import React from 'react'
 import PhotoListTop from './componment/PhotoListTop'
 import PhotoWaterFall from './componment/PhotoWaterFall'
+import PhotoCover from './componment/PhotoCover'
 import {getQueryString} from './../../util'
 import axios from 'axios'
 
@@ -23,7 +24,8 @@ class PhotoList extends React.Component{
                 value:"all"
             },
             total:'**',
-            order:'date'//pv
+            order:'date',//pv
+            showCover:true
         }
     }
     componentWillMount=()=>{
@@ -57,11 +59,19 @@ class PhotoList extends React.Component{
             total
         })
     }
+    showPhotos=()=>{
+        this.setState({
+            showCover:false
+        })
+    }
     render(){
         return(
             <div className="photo-list">
+                {this.state.showCover&&<PhotoCover {...this.state} showPhotos={this.showPhotos}/>}
+                {!this.state.showCover&&<div>
                 <PhotoListTop {...this.state} handleClassifyChange={this.handleClassifyChange} handleSortChange={this.handleSortChange}/>
                 <PhotoWaterFall {...this.state} setTotalView={this.setTotalView}/>
+                </div>}
             </div>
         )
     }
