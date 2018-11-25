@@ -27,11 +27,13 @@ class PhotoCover extends React.Component {
             }, 1000)
         }
     }
+    
     render() {
+        const coverImg="https://" + this.props.bannerPic
         return (
-            <div className="photo-list-cover">
+            <div className="photo-list-cover" alt={this.props.activityName} style={{backgroundImage:`url(${coverImg})`}}>
                 <div className="timer">{this.state.clock}s</div>
-                <img className="cover" src={"https://"+this.props.bannerPic} alt={this.props.activityName}/>
+                {/* <img className="cover" src={"https://"+this.props.bannerPic} /> */}
                 <div className="enter" onClick={this.props.showPhotos}>进入相册</div>
             </div>
         )

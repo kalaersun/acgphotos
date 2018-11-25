@@ -37,10 +37,11 @@ class PhotoListTop extends React.Component {
             </Menu>
         );
         const desc = <span>{this.props.desc}</span>;
+        const bannerImg="https://" + this.props.coverPic
         return (
             <div className="photo-list-top">
-                <div className="photo-list-top-pic">
-                    <img alt={this.props.activityName} src={"https://" + this.props.coverPic} />
+                <div className="photo-list-top-pic" alt={this.props.activityName} style={{backgroundImage:`url(${bannerImg})`}}>
+                    {/* <img  src={} /> */}
                 </div>
                 <div className="photo-list-top-title">
                     <div className="photo-list-top-name">{this.props.activityName}</div>

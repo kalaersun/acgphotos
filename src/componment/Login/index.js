@@ -19,7 +19,13 @@ class Login extends React.Component{
     }
     login=()=>{
         const {username,password}=this.state
-        this.props.login({username,password})
+        console.log(this.props.errorMsg)
+        if(this.props.errorMsg!=="")
+        {
+            message.warn(this.props.errorMsg)
+        }else{
+            this.props.login({username,password})
+        }
     }
     register=()=>{
         this.props.history.push('/register')
@@ -67,7 +73,7 @@ class Login extends React.Component{
                     <Button onClick={this.login} type="primary">登录</Button>
                     <Button onClick={this.register} type="primary">注册</Button>
                     </div>
-                    {this.props.errorMsg!==""&&message.warn(this.props.errorMsg)}
+                    
                 </div>
             </div>
         )

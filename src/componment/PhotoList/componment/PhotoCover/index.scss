@@ -1,9 +1,13 @@
 .photo-list-cover{
-    .cover{
+    width: 100%;
+    height: 100%;
+    background-repeat:no-repeat;
+    background-size:100%;
+/*     .cover{
         position: absolute;
         width: 100%;
         height: 100%;
-    }
+    } */
     .timer{
         position: absolute;
         margin:30px;

@@ -9,3 +9,6 @@ body {
     sans-serif;
   background: #efebeb;
 }
+#root{
+  height: 100%; 
+}

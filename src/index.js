@@ -20,7 +20,7 @@ const store = createStore(reducers, compose(
 ReactDOM.render(
     <Provider store={store}>
         <BrowserRouter>
-            <div>
+            <div style={{height:"100%"}}>
                 <AuthRouter></AuthRouter>
                 <Route path='/login' component={Login}></Route>
                 <Route path='/register' component={Register}></Route>
